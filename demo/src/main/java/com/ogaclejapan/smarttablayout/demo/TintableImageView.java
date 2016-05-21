@@ -43,11 +43,6 @@ public class TintableImageView extends ImageView {
     }
   }
 
-  public void setColorFilter(ColorStateList tint) {
-    this.tint = tint;
-    super.setColorFilter(tint.getColorForState(getDrawableState(), 0));
-  }
-
   private void updateTintColor() {
     int color = tint.getColorForState(getDrawableState(), 0);
     setColorFilter(color);

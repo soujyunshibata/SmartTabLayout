@@ -13,5 +13,4 @@
   android:textColor="@color/custom_tab"
   android:textSize="14sp"
   >
-
 </TextView>

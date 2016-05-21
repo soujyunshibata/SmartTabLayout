@@ -26,6 +26,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 /**
  * <p>
@@ -317,9 +319,7 @@ class SmartTabStrip extends LinearLayout {
         }
         thickness = thickness * thicknessOffset;
       }
-
-      drawIndicator(canvas, left, right, height, thickness, color);
-
+      drawIndicatorImage(canvas, left, right, height, thickness);
     }
 
     if (!indicatorInFront) {
@@ -329,7 +329,6 @@ class SmartTabStrip extends LinearLayout {
 
     // Vertical separators between the titles
     drawSeparator(canvas, height, tabCount);
-
   }
 
   private void drawSeparator(Canvas canvas, int height, int tabCount) {
@@ -355,8 +354,32 @@ class SmartTabStrip extends LinearLayout {
     }
   }
 
-  private void drawIndicator(Canvas canvas, int left, int right, int height, float thickness,
-      int color) {
+  private void drawIndicatorImage(Canvas canvas, int left, int right, int height, float thickness) {
+    Paint paint =new Paint();
+
+
+    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_stage );
+    switch (selectedPosition) {
+      case 0:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_comic );
+        break;
+      case 1:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_eiga );
+        break;
+      case 2:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_follow );
+        break;
+      case 3:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_music );
+        break;
+      case 4:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_owarai );
+        break;
+      case 5:
+        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_stage );
+        break;
+    }
+
     if (indicatorThickness <= 0 || indicatorWidth == 0) {
       return;
     }
@@ -383,7 +406,8 @@ class SmartTabStrip extends LinearLayout {
         bottom = center + (thickness / 2f);
     }
 
-    indicatorPaint.setColor(color);
+    indicatorPaint.setAlpha(0);
+
     if (indicatorWidth == AUTO_WIDTH) {
       indicatorRectF.set(left, top, right, bottom);
     } else {
@@ -393,11 +417,13 @@ class SmartTabStrip extends LinearLayout {
 
     if (indicatorCornerRadius > 0f) {
       canvas.drawRoundRect(
-          indicatorRectF, indicatorCornerRadius,
-          indicatorCornerRadius, indicatorPaint);
+              indicatorRectF, indicatorCornerRadius,
+              indicatorCornerRadius, indicatorPaint);
     } else {
       canvas.drawRect(indicatorRectF, indicatorPaint);
     }
+    canvas.drawBitmap(bmp, left + 15, top + 15, paint);
+
   }
 
   private void drawOverline(Canvas canvas, int left, int right) {
