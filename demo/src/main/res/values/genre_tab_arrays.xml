@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tabimage_array_drawable">
+    <item>@drawable/genre_tab_comic</item>
+    <item>@drawable/genre_tab_eiga</item>
+    <item>@drawable/genre_tab_follow</item>
+    <item>@drawable/genre_tab_music</item>
+    <item>@drawable/genre_tab_owarai</item>
+    <item>@drawable/genre_tab_stage</item>
+    </string-array>>
+</resources>

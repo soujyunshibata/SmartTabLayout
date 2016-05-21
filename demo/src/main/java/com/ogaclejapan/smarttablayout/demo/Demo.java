@@ -17,17 +17,6 @@ public enum Demo {
     this.layoutResId = layoutResId;
   }
 
-  public static int[] tab10() {
-    return new int[] {
-        R.string.demo_tab_1,
-        R.string.demo_tab_2,
-        R.string.demo_tab_3,
-        R.string.demo_tab_4,
-        R.string.demo_tab_5,
-        R.string.demo_tab_6
-    };
-  }
-
   public void startActivity(Context context) {
     DemoActivity.startActivity(context, this);
   }
@@ -37,7 +26,13 @@ public enum Demo {
   }
 
   public int[] tabs() {
-    return tab10();
+    return new int[] {
+            R.string.demo_tab_1,
+            R.string.demo_tab_2,
+            R.string.demo_tab_3,
+            R.string.demo_tab_4,
+            R.string.demo_tab_5,
+            R.string.demo_tab_6
+    };
   }
-
 }

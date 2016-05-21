@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
+import android.content.res.TypedArray;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -54,6 +54,8 @@ public class DemoActivity extends AppCompatActivity {
 
     viewPager.setAdapter(adapter);
     viewPagerTab.setViewPager(viewPager);
+    TypedArray images = getResources().obtainTypedArray(R.array.tabimage_array_drawable);
+    viewPagerTab.setViewPagerImage(images);
 
   }
 

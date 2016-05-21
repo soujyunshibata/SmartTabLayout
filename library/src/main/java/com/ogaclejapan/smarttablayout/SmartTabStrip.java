@@ -22,12 +22,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 
 /**
  * <p>
@@ -77,6 +79,7 @@ class SmartTabStrip extends LinearLayout {
   private final float dividerHeight;
   private final SimpleTabColorizer defaultTabColorizer;
   private final boolean drawDecorationAfterTab;
+  private TypedArray tabImages;
 
   private int lastPosition;
   private int selectedPosition;
@@ -234,6 +237,10 @@ class SmartTabStrip extends LinearLayout {
     invalidate();
   }
 
+  void setTabImages(TypedArray images) {
+    tabImages = images;
+  }
+
   void onViewPagerPageChanged(int position, float positionOffset) {
     selectedPosition = position;
     selectionOffset = positionOffset;
@@ -356,29 +363,8 @@ class SmartTabStrip extends LinearLayout {
 
   private void drawIndicatorImage(Canvas canvas, int left, int right, int height, float thickness) {
     Paint paint =new Paint();
-
-
-    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_stage );
-    switch (selectedPosition) {
-      case 0:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_comic );
-        break;
-      case 1:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_eiga );
-        break;
-      case 2:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_follow );
-        break;
-      case 3:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_music );
-        break;
-      case 4:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_owarai );
-        break;
-      case 5:
-        bmp = BitmapFactory.decodeResource(getResources(), R.drawable.genre_tab_stage );
-        break;
-    }
+    Drawable drawable = tabImages.getDrawable(selectedPosition);
+    Bitmap bmp = ((BitmapDrawable)drawable).getBitmap();
 
     if (indicatorThickness <= 0 || indicatorWidth == 0) {
       return;
@@ -423,7 +409,6 @@ class SmartTabStrip extends LinearLayout {
       canvas.drawRect(indicatorRectF, indicatorPaint);
     }
     canvas.drawBitmap(bmp, left + 15, top + 15, paint);
-
   }
 
   private void drawOverline(Canvas canvas, int left, int right) {

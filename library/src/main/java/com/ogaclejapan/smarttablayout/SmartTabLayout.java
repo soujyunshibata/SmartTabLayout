@@ -327,6 +327,12 @@ public class SmartTabLayout extends HorizontalScrollView {
       populateTabStrip();
     }
   }
+  /**
+   * Sets the viewPage images.
+   */
+  public void setViewPagerImage(TypedArray images) {
+      tabStrip.setTabImages(images);
+  }
 
   /**
    * Returns the view at the specified position in the tabs.
