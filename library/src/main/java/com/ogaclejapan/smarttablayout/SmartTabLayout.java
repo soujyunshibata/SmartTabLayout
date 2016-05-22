@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.util.ArrayList;
 
 /**
  * To be used with ViewPager to provide a tab indicator component which give constant feedback as
@@ -75,6 +76,7 @@ public class SmartTabLayout extends HorizontalScrollView {
   private int tabViewBackgroundResId;
   private boolean tabViewTextAllCaps;
   private ColorStateList tabViewTextColors;
+  private ColorStateList tabViewSelecredTextColors;
   private float tabViewTextSize;
   private int tabViewTextHorizontalPadding;
   private int tabViewTextMinWidth;
@@ -85,6 +87,8 @@ public class SmartTabLayout extends HorizontalScrollView {
   private InternalTabClickListener internalTabClickListener;
   private OnTabClickListener onTabClickListener;
   private boolean distributeEvenly;
+  private ArrayList<View> textViews = new ArrayList<View>( );
+
 
   public SmartTabLayout(Context context) {
     this(context, null);
@@ -106,6 +110,7 @@ public class SmartTabLayout extends HorizontalScrollView {
     int tabBackgroundResId = NO_ID;
     boolean textAllCaps = TAB_VIEW_TEXT_ALL_CAPS;
     ColorStateList textColors;
+    ColorStateList selectedTextColors;
     float textSize = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP, dm);
     int textHorizontalPadding = (int) (TAB_VIEW_PADDING_DIPS * density);
@@ -124,6 +129,8 @@ public class SmartTabLayout extends HorizontalScrollView {
         R.styleable.stl_SmartTabLayout_stl_defaultTabTextAllCaps, textAllCaps);
     textColors = a.getColorStateList(
         R.styleable.stl_SmartTabLayout_stl_defaultTabTextColor);
+    selectedTextColors = a.getColorStateList(
+            R.styleable.stl_SmartTabLayout_stl_selectedTabTextColor);
     textSize = a.getDimension(
         R.styleable.stl_SmartTabLayout_stl_defaultTabTextSize, textSize);
     textHorizontalPadding = a.getDimensionPixelSize(
@@ -148,6 +155,9 @@ public class SmartTabLayout extends HorizontalScrollView {
     this.tabViewTextColors = (textColors != null)
         ? textColors
         : ColorStateList.valueOf(TAB_VIEW_TEXT_COLOR);
+    this.tabViewSelecredTextColors = (selectedTextColors != null)
+            ? selectedTextColors
+            : ColorStateList.valueOf(TAB_VIEW_TEXT_COLOR);
     this.tabViewTextSize = textSize;
     this.tabViewTextHorizontalPadding = textHorizontalPadding;
     this.tabViewTextMinWidth = textMinWidth;
@@ -175,6 +185,8 @@ public class SmartTabLayout extends HorizontalScrollView {
   @Override
   protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
+//    populateTabStrip();
+    setTextViewTextColor();
     if (onScrollChangeListener != null) {
       onScrollChangeListener.onScrollChanged(l, oldl);
     }
@@ -200,6 +212,19 @@ public class SmartTabLayout extends HorizontalScrollView {
     // Ensure first scroll
     if (changed && viewPager != null) {
       scrollToTab(viewPager.getCurrentItem(), 0);
+    }
+  }
+
+  private void setTextViewTextColor(){
+    final PagerAdapter adapter = viewPager.getAdapter();
+    for (int i = 0; i < adapter.getCount(); i++) {
+      TextView tabView = (TextView) textViews.get(i);
+      if (i != viewPager.getCurrentItem()) {
+        tabView.setTextColor(tabViewTextColors);
+      } else {
+        tabView.setTextColor(tabViewSelecredTextColors);
+      }
+      tabView.invalidate();
     }
   }
 
@@ -241,6 +266,10 @@ public class SmartTabLayout extends HorizontalScrollView {
    */
   public void setDefaultTabTextColor(ColorStateList colors) {
     tabViewTextColors = colors;
+  }
+
+  public void setSelectedTabTextColor(ColorStateList colors) {
+    tabViewSelecredTextColors = colors;
   }
 
   /**
@@ -349,11 +378,11 @@ public class SmartTabLayout extends HorizontalScrollView {
    * Create a default view to be used for tabs. This is called if a custom tab view is not set via
    * {@link #setCustomTabView(int, int)}.
    */
-  protected TextView createDefaultTabView(CharSequence title) {
+  protected TextView createDefaultTabView(CharSequence title, ColorStateList colors) {
     TextView textView = new TextView(getContext());
     textView.setGravity(Gravity.CENTER);
     textView.setText(title);
-    textView.setTextColor(tabViewTextColors);
+    textView.setTextColor(colors);
     textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabViewTextSize);
     textView.setTypeface(Typeface.DEFAULT_BOLD);
     textView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -388,12 +417,17 @@ public class SmartTabLayout extends HorizontalScrollView {
 
   private void populateTabStrip() {
     final PagerAdapter adapter = viewPager.getAdapter();
-
     for (int i = 0; i < adapter.getCount(); i++) {
-
-      final View tabView = (tabProvider == null)
-          ? createDefaultTabView(adapter.getPageTitle(i))
-          : tabProvider.createTabView(tabStrip, i, adapter);
+      View tabView;
+      if (i != viewPager.getCurrentItem()){
+        tabView = (tabProvider == null)
+                ? createDefaultTabView(adapter.getPageTitle(i), tabViewTextColors)
+                : tabProvider.createTabView(tabStrip, i, adapter);
+      }else{
+        tabView = (tabProvider == null)
+                ? createDefaultTabView(adapter.getPageTitle(i), tabViewSelecredTextColors)
+                : tabProvider.createTabView(tabStrip, i, adapter);
+      }
 
       if (tabView == null) {
         throw new IllegalStateException("tabView is null.");
@@ -413,8 +447,11 @@ public class SmartTabLayout extends HorizontalScrollView {
 
       if (i == viewPager.getCurrentItem()) {
         tabView.setSelected(true);
+//        tabView.(tabViewSelecredTextColors);
+//        tabView.invalidate();
       }
-
+//      tabStrip.addView(tabView);
+      textViews.add(i,tabView);
     }
   }
 

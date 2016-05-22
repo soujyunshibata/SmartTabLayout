@@ -28,7 +28,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -300,14 +299,8 @@ class SmartTabStrip extends LinearLayout {
         right = selectedEnd;
       }
 
-      int color = tabColorizer.getIndicatorColor(selectedPosition);
       float thickness = indicatorThickness;
-
       if (selectionOffset > 0f && selectedPosition < (getChildCount() - 1)) {
-        int nextColor = tabColorizer.getIndicatorColor(selectedPosition + 1);
-        if (color != nextColor) {
-          color = blendColors(nextColor, color, selectionOffset);
-        }
 
         // Draw the selection partway between the tabs
         float startOffset = indicationInterpolator.getLeftEdge(selectionOffset);
@@ -332,32 +325,6 @@ class SmartTabStrip extends LinearLayout {
     if (!indicatorInFront) {
       drawOverline(canvas, 0, width);
       drawUnderline(canvas, 0, getWidth(), height);
-    }
-
-    // Vertical separators between the titles
-    drawSeparator(canvas, height, tabCount);
-  }
-
-  private void drawSeparator(Canvas canvas, int height, int tabCount) {
-    if (dividerThickness <= 0) {
-      return;
-    }
-
-    final int dividerHeightPx = (int) (Math.min(Math.max(0f, dividerHeight), 1f) * height);
-    final SmartTabLayout.TabColorizer tabColorizer = getTabColorizer();
-
-    // Vertical separators between the titles
-    final int separatorTop = (height - dividerHeightPx) / 2;
-    final int separatorBottom = separatorTop + dividerHeightPx;
-
-    final boolean isLayoutRtl = Utils.isLayoutRtl(this);
-    for (int i = 0; i < tabCount - 1; i++) {
-      View child = getChildAt(i);
-      int end = Utils.getEnd(child);
-      int endMargin = Utils.getMarginEnd(child);
-      int separatorX = isLayoutRtl ? end - endMargin : end + endMargin;
-      dividerPaint.setColor(tabColorizer.getDividerColor(i));
-      canvas.drawLine(separatorX, separatorTop, separatorX, separatorBottom, dividerPaint);
     }
   }
 
@@ -408,7 +375,7 @@ class SmartTabStrip extends LinearLayout {
     } else {
       canvas.drawRect(indicatorRectF, indicatorPaint);
     }
-    canvas.drawBitmap(bmp, left + 15, top + 15, paint);
+    canvas.drawBitmap(bmp, left, top, paint);
   }
 
   private void drawOverline(Canvas canvas, int left, int right) {
