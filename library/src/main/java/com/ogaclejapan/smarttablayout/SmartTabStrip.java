@@ -29,6 +29,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import static java.lang.Math.abs;
 
 /**
  * <p>
@@ -339,7 +341,6 @@ class SmartTabStrip extends LinearLayout {
 
     float center;
     float top;
-
     switch (indicatorGravity) {
       case GRAVITY_TOP:
         center = indicatorThickness / 2f;
@@ -357,7 +358,9 @@ class SmartTabStrip extends LinearLayout {
 
     indicatorPaint.setAlpha(0);
 
-    canvas.drawBitmap(bmp, left, top, paint);
+    float bmpLeft = abs(bmp.getWidth() - (right-left))/2;
+    float drawLeft = abs(left - bmpLeft);
+    canvas.drawBitmap(bmp, drawLeft, top, paint);
   }
 
   private void drawOverline(Canvas canvas, int left, int right) {
