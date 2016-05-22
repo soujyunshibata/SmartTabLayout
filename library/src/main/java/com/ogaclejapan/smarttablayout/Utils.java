@@ -21,7 +21,7 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
-class Utils {
+public class Utils {
 
   static int getMeasuredWidth(View v) {
     return (v == null) ? 0 : v.getMeasuredWidth();
