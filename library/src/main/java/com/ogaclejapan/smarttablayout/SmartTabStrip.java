@@ -29,7 +29,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import static java.lang.Math.abs;
 
 /**
