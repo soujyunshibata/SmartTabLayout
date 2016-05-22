@@ -339,42 +339,24 @@ class SmartTabStrip extends LinearLayout {
 
     float center;
     float top;
-    float bottom;
 
     switch (indicatorGravity) {
       case GRAVITY_TOP:
         center = indicatorThickness / 2f;
         top = center - (thickness / 2f);
-        bottom = center + (thickness / 2f);
         break;
       case GRAVITY_CENTER:
         center = height / 2f;
         top = center - (thickness / 2f);
-        bottom = center + (thickness / 2f);
         break;
       case GRAVITY_BOTTOM:
       default:
         center = height - (indicatorThickness / 2f);
         top = center - (thickness / 2f);
-        bottom = center + (thickness / 2f);
     }
 
     indicatorPaint.setAlpha(0);
 
-    if (indicatorWidth == AUTO_WIDTH) {
-      indicatorRectF.set(left, top, right, bottom);
-    } else {
-      float padding = (Math.abs(left - right) - indicatorWidth) / 2f;
-      indicatorRectF.set(left + padding, top, right - padding, bottom);
-    }
-
-    if (indicatorCornerRadius > 0f) {
-      canvas.drawRoundRect(
-              indicatorRectF, indicatorCornerRadius,
-              indicatorCornerRadius, indicatorPaint);
-    } else {
-      canvas.drawRect(indicatorRectF, indicatorPaint);
-    }
     canvas.drawBitmap(bmp, left, top, paint);
   }
 

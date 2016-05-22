@@ -185,7 +185,6 @@ public class SmartTabLayout extends HorizontalScrollView {
   @Override
   protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
-//    populateTabStrip();
     setTextViewTextColor();
     if (onScrollChangeListener != null) {
       onScrollChangeListener.onScrollChanged(l, oldl);
