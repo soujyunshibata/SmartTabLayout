@@ -332,34 +332,35 @@ public class SmartTabStrip extends LinearLayout {
   private void drawIndicatorImage(Canvas canvas, int left, int right, int height, float thickness) {
     Paint paint =new Paint();
     Drawable drawable = tabImages.getDrawable(selectedPosition);
-    Bitmap bmp = ((BitmapDrawable)drawable).getBitmap();
+    if (drawable != null) {
+        Bitmap bmp = ((BitmapDrawable) drawable).getBitmap();
+      if (indicatorThickness <= 0 || indicatorWidth == 0) {
+        return;
+      }
 
-    if (indicatorThickness <= 0 || indicatorWidth == 0) {
-      return;
+      float center;
+      float top;
+      switch (indicatorGravity) {
+        case GRAVITY_TOP:
+          center = indicatorThickness / 2f;
+          top = center - (thickness / 2f);
+          break;
+        case GRAVITY_CENTER:
+          center = height / 2f;
+          top = center - (thickness / 2f);
+          break;
+        case GRAVITY_BOTTOM:
+        default:
+          center = height - (indicatorThickness / 2f);
+          top = center - (thickness / 2f);
+      }
+
+      indicatorPaint.setAlpha(0);
+
+      float bmpLeft = abs(bmp.getWidth() - (right - left)) / 2;
+      float drawLeft = abs(left - bmpLeft);
+      canvas.drawBitmap(bmp, drawLeft, top, paint);
     }
-
-    float center;
-    float top;
-    switch (indicatorGravity) {
-      case GRAVITY_TOP:
-        center = indicatorThickness / 2f;
-        top = center - (thickness / 2f);
-        break;
-      case GRAVITY_CENTER:
-        center = height / 2f;
-        top = center - (thickness / 2f);
-        break;
-      case GRAVITY_BOTTOM:
-      default:
-        center = height - (indicatorThickness / 2f);
-        top = center - (thickness / 2f);
-    }
-
-    indicatorPaint.setAlpha(0);
-
-    float bmpLeft = abs(bmp.getWidth() - (right-left))/2;
-    float drawLeft = abs(left - bmpLeft);
-    canvas.drawBitmap(bmp, drawLeft, top, paint);
   }
 
   private void drawOverline(Canvas canvas, int left, int right) {
