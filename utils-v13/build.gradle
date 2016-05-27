@@ -183,7 +183,7 @@ uploadArchives {
   repositories {
     mavenDeployer {
       repository url: "file://${repo.absolutePath}"
-      pom.version = '1.0.0'             // version
+      pom.version = '1.0.6'             // version
       pom.groupId = 'tokyo.sakama'    // グループ名
       pom.artifactId = 'smartTabLayout-utils-v13' // ライブラリ名
     }
